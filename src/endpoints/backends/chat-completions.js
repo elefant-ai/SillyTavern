@@ -55,7 +55,7 @@ const API_AI21 = 'https://api.ai21.com/studio/v1';
 const API_NANOGPT = 'https://nano-gpt.com/api/v1';
 const API_DEEPSEEK = 'https://api.deepseek.com/beta';
 const API_XAI = 'https://api.x.ai/v1';
-const API_PLAYER2 = 'http://localhost:4315';
+const API_PLAYER2 = 'http://localhost:4315/v1';
 
 /**
  * Applies a post-processing step to the generated messages.

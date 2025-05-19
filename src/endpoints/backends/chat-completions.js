@@ -990,7 +990,7 @@ router.post('/status', async function (request, response_getstatus_openai) {
     }
 
     try {
-        const statusEndpoint = request.body.chat_completion_source === CHAT_COMPLETION_SOURCES.PLAYER2 ? '/v1/health' : '/models';
+        const statusEndpoint = request.body.chat_completion_source === CHAT_COMPLETION_SOURCES.PLAYER2 ? '/health' : '/models';
         const authHeader = request.body.chat_completion_source === CHAT_COMPLETION_SOURCES.PLAYER2 ? {} : { 'Authorization': 'Bearer ' + api_key_openai };
         const response = await fetch(api_url + statusEndpoint, {
             method: 'GET',

@@ -11,20 +11,16 @@ class Player2TtsProvider {
     defaultSettings = {
         voiceMap: {},
         speed: 1,
-        game_key: 'SillyTavern',
     };
 
     get settingsHtml() {
         let html = `
-        <label for="player2_game_key">Game Key</label>
-        <input id="player2_game_key" type="text" class="text_pole" placeholder="Game Name"/>
         <label for="player2_speed">Speed: <span id="player2_speed_output"></span></label>
         <input id="player2_speed" type="range" value="1" min="0.25" max="4" step="0.05" />`;
         return html;
     }
 
     onSettingsChange() {
-        this.settings.game_key = String($('#player2_game_key').val());
         this.settings.speed = Number($('#player2_speed').val());
         $('#player2_speed_output').text(this.settings.speed);
         saveTtsProviderSettings();
@@ -42,8 +38,6 @@ class Player2TtsProvider {
                 throw `Invalid setting passed to TTS Provider: ${key}`;
             }
         }
-        $('#player2_game_key').val(this.settings.game_key);
-        $('#player2_game_key').on('input', () => { this.onSettingsChange(); });
 
         $('#player2_speed').val(this.settings.speed);
         $('#player2_speed').on('input', () => { this.onSettingsChange(); });
@@ -120,7 +114,6 @@ class Player2TtsProvider {
                 voice_ids: [voiceId],
                 play_in_app: false,
                 speed: this.settings.speed,
-                game_key: this.settings.game_key,
             }),
         });
         if (!response.ok) {

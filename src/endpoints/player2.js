@@ -8,7 +8,7 @@ const BASE_URL = 'http://localhost:4315/v1';
 function buildHeaders(gameKey) {
     return {
         'Content-Type': 'application/json',
-        'player2-game-key': gameKey ?? 'SillyTavern',
+        'player2-game-key': 'SillyTavern',
     };
 }
 
@@ -31,7 +31,7 @@ router.post('/tts/speak', async (req, res) => {
     try {
         const result = await fetch(`${BASE_URL}/tts/speak`, {
             method: 'POST',
-            headers: buildHeaders(req.body.game_key),
+            headers: buildHeaders(),
             body: JSON.stringify({
                 text: req.body.text,
                 voice_ids: req.body.voice_ids,
@@ -59,7 +59,7 @@ router.post('/tts/stop', async (req, res) => {
     try {
         const result = await fetch(`${BASE_URL}/tts/stop`, {
             method: 'POST',
-            headers: buildHeaders(req.body.game_key),
+            headers: buildHeaders(),
         });
         if (!result.ok) {
             console.warn('Player2 TTS stop failed', result.status, result.statusText);
@@ -91,7 +91,7 @@ router.post('/tts/volume', async (req, res) => {
     try {
         const result = await fetch(`${BASE_URL}/tts/volume`, {
             method: 'POST',
-            headers: buildHeaders(req.body.game_key),
+            headers: buildHeaders(),
             body: JSON.stringify({ volume: req.body.volume }),
         });
         if (!result.ok) {
@@ -109,7 +109,7 @@ router.post('/stt/start', async (req, res) => {
     try {
         const result = await fetch(`${BASE_URL}/stt/start`, {
             method: 'POST',
-            headers: buildHeaders(req.body.game_key),
+            headers: buildHeaders(),
             body: JSON.stringify({ timeout: req.body.timeout }),
         });
         if (!result.ok) {
@@ -128,7 +128,7 @@ router.post('/stt/stop', async (req, res) => {
     try {
         const result = await fetch(`${BASE_URL}/stt/stop`, {
             method: 'POST',
-            headers: buildHeaders(req.body.game_key),
+            headers: buildHeaders(),
         });
         if (!result.ok) {
             console.warn('Player2 STT stop failed', result.status, result.statusText);
@@ -174,7 +174,7 @@ router.post('/stt/language', async (req, res) => {
     try {
         const result = await fetch(`${BASE_URL}/stt/language`, {
             method: 'POST',
-            headers: buildHeaders(req.body.game_key),
+            headers: buildHeaders(),
             body: JSON.stringify({ code: req.body.code }),
         });
         if (!result.ok) {

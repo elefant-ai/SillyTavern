@@ -977,7 +977,7 @@ router.post('/status', async function (request, response_getstatus_openai) {
     } else if (request.body.chat_completion_source === CHAT_COMPLETION_SOURCES.PLAYER2) {
         api_url = API_PLAYER2;
         api_key_openai = null;
-        headers = { 'player2-game-key': 'sillytavern' };
+        headers = {};
     } else {
         console.warn('This chat completion source is not supported yet.');
         return response_getstatus_openai.status(400).send({ error: true });
@@ -1263,7 +1263,7 @@ router.post('/generate', function (request, response) {
     } else if (request.body.chat_completion_source === CHAT_COMPLETION_SOURCES.PLAYER2) {
         apiUrl = API_PLAYER2;
         apiKey = null;
-        headers = { 'player2-game-key': 'sillytavern' };
+        headers = {};
         bodyParams = {};
     } else {
         console.warn('This chat completion source is not supported yet.');

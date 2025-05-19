@@ -19,6 +19,7 @@ import { AllTalkTtsProvider } from './alltalk.js';
 import { CosyVoiceProvider } from './cosyvoice.js';
 import { SpeechT5TtsProvider } from './speecht5.js';
 import { AzureTtsProvider } from './azure.js';
+import { Player2TtsProvider } from './player2.js';
 import { SlashCommandParser } from '../../slash-commands/SlashCommandParser.js';
 import { SlashCommand } from '../../slash-commands/SlashCommand.js';
 import { ARGUMENT_TYPE, SlashCommandArgument, SlashCommandNamedArgument } from '../../slash-commands/SlashCommandArgument.js';
@@ -99,6 +100,7 @@ const ttsProviders = {
     Novel: NovelTtsProvider,
     OpenAI: OpenAITtsProvider,
     'OpenAI Compatible': OpenAICompatibleTtsProvider,
+    Player2: Player2TtsProvider,
     SBVits2: SBVits2TtsProvider,
     Silero: SileroTtsProvider,
     SpeechT5: SpeechT5TtsProvider,

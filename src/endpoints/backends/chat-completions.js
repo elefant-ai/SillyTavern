@@ -55,6 +55,7 @@ const API_AI21 = 'https://api.ai21.com/studio/v1';
 const API_NANOGPT = 'https://nano-gpt.com/api/v1';
 const API_DEEPSEEK = 'https://api.deepseek.com/beta';
 const API_XAI = 'https://api.x.ai/v1';
+const API_PLAYER2 = 'http://localhost:4315';
 
 /**
  * Applies a post-processing step to the generated messages.
@@ -973,21 +974,28 @@ router.post('/status', async function (request, response_getstatus_openai) {
         api_url = new URL(request.body.reverse_proxy || API_XAI);
         api_key_openai = request.body.reverse_proxy ? request.body.proxy_password : readSecret(request.user.directories, SECRET_KEYS.XAI);
         headers = {};
+    } else if (request.body.chat_completion_source === CHAT_COMPLETION_SOURCES.PLAYER2) {
+        api_url = API_PLAYER2;
+        api_key_openai = null;
+        headers = { 'player2-game-key': 'sillytavern' };
     } else {
         console.warn('This chat completion source is not supported yet.');
         return response_getstatus_openai.status(400).send({ error: true });
     }
 
-    if (!api_key_openai && !request.body.reverse_proxy && request.body.chat_completion_source !== CHAT_COMPLETION_SOURCES.CUSTOM) {
+    if (!api_key_openai && !request.body.reverse_proxy &&
+        ![CHAT_COMPLETION_SOURCES.CUSTOM, CHAT_COMPLETION_SOURCES.PLAYER2].includes(request.body.chat_completion_source)) {
         console.warn('Chat Completion API key is missing.');
         return response_getstatus_openai.status(400).send({ error: true });
     }
 
     try {
-        const response = await fetch(api_url + '/models', {
+        const statusEndpoint = request.body.chat_completion_source === CHAT_COMPLETION_SOURCES.PLAYER2 ? '/v1/health' : '/models';
+        const authHeader = request.body.chat_completion_source === CHAT_COMPLETION_SOURCES.PLAYER2 ? {} : { 'Authorization': 'Bearer ' + api_key_openai };
+        const response = await fetch(api_url + statusEndpoint, {
             method: 'GET',
             headers: {
-                'Authorization': 'Bearer ' + api_key_openai,
+                ...authHeader,
                 ...headers,
             },
         });
@@ -1252,6 +1260,11 @@ router.post('/generate', function (request, response) {
         apiKey = readSecret(request.user.directories, SECRET_KEYS.ZEROONEAI);
         headers = {};
         bodyParams = {};
+    } else if (request.body.chat_completion_source === CHAT_COMPLETION_SOURCES.PLAYER2) {
+        apiUrl = API_PLAYER2;
+        apiKey = null;
+        headers = { 'player2-game-key': 'sillytavern' };
+        bodyParams = {};
     } else {
         console.warn('This chat completion source is not supported yet.');
         return response.status(400).send({ error: true });
@@ -1264,7 +1277,8 @@ router.post('/generate', function (request, response) {
         }
     }
 
-    if (!apiKey && !request.body.reverse_proxy && request.body.chat_completion_source !== CHAT_COMPLETION_SOURCES.CUSTOM) {
+    if (!apiKey && !request.body.reverse_proxy &&
+        ![CHAT_COMPLETION_SOURCES.CUSTOM, CHAT_COMPLETION_SOURCES.PLAYER2].includes(request.body.chat_completion_source)) {
         console.warn('OpenAI API key is missing.');
         return response.status(400).send({ error: true });
     }
@@ -1308,6 +1322,10 @@ router.post('/generate', function (request, response) {
         'n': request.body.n,
         ...bodyParams,
     };
+
+    if (request.body.chat_completion_source === CHAT_COMPLETION_SOURCES.PLAYER2) {
+        delete requestBody.model;
+    }
 
     if (request.body.chat_completion_source === CHAT_COMPLETION_SOURCES.CUSTOM) {
         excludeKeysByYaml(requestBody, request.body.custom_exclude_body);

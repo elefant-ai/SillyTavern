@@ -184,6 +184,7 @@ export const chat_completion_sources = {
     ZEROONEAI: '01ai',
     NANOGPT: 'nanogpt',
     DEEPSEEK: 'deepseek',
+    PLAYER2: 'player2',
     XAI: 'xai',
 };
 
@@ -1649,6 +1650,8 @@ export function getChatCompletionModel(source = null) {
             return oai_settings.nanogpt_model;
         case chat_completion_sources.DEEPSEEK:
             return oai_settings.deepseek_model;
+        case chat_completion_sources.PLAYER2:
+            return '';
         case chat_completion_sources.XAI:
             return oai_settings.xai_model;
         default:
@@ -2343,6 +2346,7 @@ function parseChatCompletionLogprobs(data) {
         case chat_completion_sources.OPENAI:
         case chat_completion_sources.DEEPSEEK:
         case chat_completion_sources.XAI:
+        case chat_completion_sources.PLAYER2:
         case chat_completion_sources.CUSTOM:
             if (!data.choices?.length) {
                 return null;
